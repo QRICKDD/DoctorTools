@@ -8,10 +8,10 @@ BCH码是一类重要的纠错码，它把信源待发的信息序列按固定�
 """
 
 """
-基本信息
+流程： 字符->bytearray uft-8->
 """
 #嵌密信息
-pre_secret='Hello'
+pre_secret='H ello'
 BCH_POLYNOMIAL = 137  #生成多项式
 BCH_BITS = 5
 bch = bchlib.BCH(BCH_POLYNOMIAL, BCH_BITS)
@@ -25,7 +25,7 @@ ecc=bch.encode(data) #拿到纠错码
 print("bch编码:",ecc)
 packet=data+ecc  #嵌入纠错码
 #使用format函数，将bytearray中存储的十六制数转换为二进制
-packet_binary = ''.join(format(x, '08b') for x in packet)
+packet_binary = ' '.join(format(x, '08b') for x in packet)
 print(packet_binary)
 correct_bin=packet_binary
 secret = [int(x) for x in packet_binary]
@@ -40,5 +40,5 @@ packet_binary = "".join([str(int(bit)) for bit in secret[:96]])
 packet = bytes(int(packet_binary[i : i + 8], 2) for i in range(0, len(packet_binary), 8))
 packet = bytearray(packet)
 data, ecc = packet[:-bch.ecc_bytes], packet[-bch.ecc_bytes:] #拿到数据 和纠错码
-bitflips = bch.decode_inplace(data, ecc)#纠错 牛皮啊
+bitflips = bch.decode_inplace(data, ecc)#纠错
 code = data.decode("utf-8")
